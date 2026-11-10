@@ -1,0 +1,116 @@
+backend:
+  name: github
+  repo: the-efcc/thefederation.eu
+  branch: main
+
+site_url: https://new.thefederation.eu
+media_folder: static/media
+public_folder: /media
+
+output:
+  omit_empty_optional_fields: true
+
+# Shared field sets: every content file is Markdown with TOML front matter,
+# and theme-specific values live under [extra] (see themes/efcc).
+fields:
+  title: &title { name: title, label: Title }
+  body: &body { name: body, label: Text, widget: markdown, required: false }
+  banner: &banner { name: banner, label: Banner picture, widget: image, required: false, hint: Shown behind the page title. Falls back to the banner of the parent section. }
+  image: &image { name: image, label: Teaser picture, widget: image, required: false, hint: Shown in the list of the parent section. }
+  description: &description { name: description, label: Description, required: false, hint: Short text for search engines. }
+  weight: &weight { name: weight, label: Position, widget: number, required: false, hint: Lower numbers come first. }
+  link: &link { name: link, label: External link, required: false, hint: "If set, the list entry links straight to this address (e.g. the event's page on events.thefederation.eu)." }
+  section: &section
+    - *title
+    - *description
+    - { name: sort_by, widget: hidden }
+    - { name: extra, label: Options, widget: object, required: false, fields: [*banner] }
+    - *body
+  page: &page
+    - *title
+    - *description
+    - { name: aliases, widget: hidden }
+    - { name: extra, label: Options, widget: object, required: false, fields: [*banner] }
+    - *body
+
+collections:
+  - name: pages
+    label: Pages
+    icon: description
+    format: toml-frontmatter
+    files:
+      - name: home
+        label: Home
+        file: content/_index.md
+        fields:
+          - *title
+          - name: extra
+            label: Options
+            widget: object
+            fields:
+              - name: slides
+                label: Highlights
+                hint: The first one is the big banner, the others are shown as cards below it.
+                widget: list
+                summary: "{{title}}"
+                fields:
+                  - { name: image, label: Picture, widget: image }
+                  - *title
+                  - { name: text, label: Text }
+                  - { name: link_text, label: Button text }
+                  - { name: link, label: Button link }
+          - *body
+      - { name: efcc, label: EFCC, file: content/efcc.md, fields: *page }
+      - { name: contact, label: Contact, file: content/contact.md, fields: *page }
+      - { name: imprint, label: Imprint, file: content/imprint.md, fields: *page }
+      - { name: privacy, label: Privacy statement - GTC, file: content/privacy.md, fields: *page }
+
+  - name: churches
+    label: Churches
+    label_singular: Church
+    icon: church
+    folder: content/churches
+    format: toml-frontmatter
+    create: true
+    slug: "{{title}}"
+    index_file: { label: Churches page, fields: *section }
+    fields:
+      - { name: title, label: City }
+      - { name: extra, label: Options, widget: object, fields: [*image, *banner] }
+      - { <<: *body, hint: "Text above a `<!-- more -->` line is used as the teaser in the list of churches." }
+
+  - name: projects
+    label: Projects
+    label_singular: Project
+    icon: event
+    folder: content/projects
+    format: toml-frontmatter
+    create: true
+    slug: "{{title}}"
+    index_file: { label: Projects page, fields: *section }
+    fields:
+      - *title
+      - *weight
+      - name: extra
+        label: Options
+        widget: object
+        fields:
+          - *image
+          - *banner
+          - { name: status, label: Registration status, widget: select, required: false, options: [to come, open, last call, closed] }
+          - *link
+      - { <<: *body, hint: "With an external link the whole text is the teaser; otherwise the text above a `<!-- more -->` line is." }
+
+  - name: toolbox
+    label: Toolbox
+    icon: home_repair_service
+    folder: content/toolbox
+    format: toml-frontmatter
+    create: true
+    slug: "{{title}}"
+    index_file: { label: Toolbox page, fields: *section }
+    fields:
+      - *title
+      - *weight
+      - { name: extra, label: Options, widget: object, fields: [*image, *banner, *link] }
+      - *body

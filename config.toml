@@ -1,0 +1,17 @@
+base_url = "https://new.thefederation.eu"
+title = "EFCC"
+description = "European Federation of Churches of Christ"
+theme = "efcc"
+
+[extra]
+menu = [
+    { name = "EFCC", url = "/efcc/" },
+    { name = "Churches", url = "/churches/" },
+    { name = "Projects", url = "/projects/" },
+    { name = "Toolbox", url = "/toolbox/" },
+    { name = "Contact", url = "/contact/" },
+]
+footer_menu = [
+    { name = "Imprint", url = "/imprint/" },
+    { name = "Privacy statement - GTC", url = "/privacy/" },
+]

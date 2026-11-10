@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}">
+  <link rel="icon" href="/favicon.png">
+  <link rel="stylesheet" href="{{ get_url(path='style.css', cachebust=true) }}">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <img src="/efcc.png" alt="EFCC" width="445" height="218">
+      <span>European Federation<br>of Churches of Christ</span>
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        {% for item in config.extra.menu %}
+        <li><a href="{{ item.url }}"{% if current_path is defined and current_path is starting_with(pat=item.url) %} aria-current="page"{% endif %}>{{ item.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </header>
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <p>© {{ now() | date(format="%Y") }} EFCC</p>
+    <ul>
+      {% for item in config.extra.footer_menu %}
+      <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </footer>
+</body>
+</html>

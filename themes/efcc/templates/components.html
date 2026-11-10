@@ -1,0 +1,17 @@
+{% component hero(title, image="", text="", link="", link_text="", class="") %}
+<div class="hero {{ class }}">
+  {% if image %}
+  {% set img = resize_image(path=image, width=1920, height=800, op="fill", format="webp", quality=80) %}
+  <img src="{{ img.url }}" alt="">
+  {% endif %}
+  <div>
+    <h1>{{ title }}</h1>
+    {% if text %}<p>{{ text }}</p>{% endif %}
+    {% if link %}<a class="btn" href="{{ link }}">{{ link_text }}</a>{% endif %}
+  </div>
+</div>
+{% endcomponent hero %}
+
+{% component status(status) %}
+<p class="status status-{{ status | slugify }}">Registration: {{ status }}</p>
+{% endcomponent status %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% set slides = section.extra.slides | default(value=[]) %}
+{% for s in slides[:1] %}
+{{ <hero title={s.title} image={s.image} text={s.text} link={s.link} link_text={s.link_text} class="hero-home" /> }}
+{% endfor %}
+<div class="cards">
+  {% for s in slides[1:] %}
+  {% set img = resize_image(path=s.image, width=800, height=450, op="fill", format="webp", quality=80) %}
+  <a class="card" href="{{ s.link }}">
+    <img src="{{ img.url }}" alt="" width="800" height="450" loading="lazy">
+    <h2>{{ s.title }}</h2>
+    <p>{{ s.text }}</p>
+    <span class="btn">{{ s.link_text }}</span>
+  </a>
+  {% endfor %}
+</div>
+<div class="prose">{{ section.content | safe }}</div>
+{% endblock %}

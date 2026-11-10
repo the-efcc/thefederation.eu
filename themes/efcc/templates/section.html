@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }} - {{ config.title }}{% endblock %}
+{% block description %}{{ section.description | default(value=config.description) }}{% endblock %}
+
+{% block content %}
+{{ <hero title={section.title} image={section.extra.banner or ""} /> }}
+{% if section.content %}<div class="prose">{{ section.content | safe }}</div>{% endif %}
+<div class="teasers">
+  {% for page in section.pages %}
+  {% set url = page.extra.link | default(value=page.path) %}
+  <article class="teaser">
+    {% if page.extra.image %}
+    {% set img = resize_image(path=page.extra.image, width=800, height=500, op="fill", format="webp", quality=80) %}
+    <img src="{{ img.url }}" alt="" width="800" height="500" loading="lazy">
+    {% endif %}
+    <div>
+      <h2><a href="{{ url }}">{{ page.title }}</a></h2>
+      {% if page.extra.status %}{{ <status status={page.extra.status} /> }}{% endif %}
+      {% if page.summary %}{{ page.summary | safe }}{% elif page.extra.link %}{{ page.content | safe }}{% else %}<p>{{ page.content | striptags | truncate(length=300) }}</p>{% endif %}
+      <a class="btn" href="{{ url }}" aria-label="More information about {{ page.title }}">More information</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}
