@@ -3,7 +3,7 @@ title = "Home"
 
 [[extra.slides]]
 image = "/media/efcc_full.jpg"
-title = "Welcome to EFCC"
+title = "Welcome to TEST"
 text = "The European Federation of Churches of Christ is an organisation of Churches in Europe"
 link_text = "About us"
 link = "/efcc/"
